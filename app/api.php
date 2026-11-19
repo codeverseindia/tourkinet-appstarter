@@ -2,12 +2,20 @@
 declare(strict_types=1);
 
 const TOURKINET_ENDPOINTS = [
-    'packages' => '',
-    'package' => '',
-    'blogs' => '',
-    'blog' => '',
-    'inquiry' => '',
+    'packages' => '/packages',
+    'package' => '/packages/{slug}',
+    'blogs' => '/blogs',
+    'blog' => '/blogs/{slug}',
+    'inquiry' => '/inquiries',
 ];
+
+function api_is_local_development_url(array $parts): bool
+{
+    return (string) env('APP_ENV', 'local') === 'local'
+        && strtolower((string) ($parts['scheme'] ?? '')) === 'http'
+        && strtolower((string) ($parts['host'] ?? '')) === 'api.tourkinet.loc'
+        && (!isset($parts['port']) || (int) $parts['port'] === 80);
+}
 
 function api_request(string $method, string $path, array $query = [], ?array $payload = null, int $ttl = 0, array $pathParams = []): array
 {
@@ -20,7 +28,14 @@ function api_request(string $method, string $path, array $query = [], ?array $pa
         return [];
     }
     $baseParts = parse_url($base);
-    if (!is_array($baseParts) || ($baseParts['scheme'] ?? '') !== 'https' || empty($baseParts['host']) || isset($baseParts['user']) || isset($baseParts['pass']) || isset($baseParts['query']) || isset($baseParts['fragment'])) {
+    if (!is_array($baseParts)) {
+        error_log('[application] Invalid Tour Kinet API base URL configuration.');
+        return [];
+    }
+    $scheme = strtolower((string) ($baseParts['scheme'] ?? ''));
+    $host = strtolower((string) ($baseParts['host'] ?? ''));
+    $localDevelopment = api_is_local_development_url($baseParts);
+    if (($scheme !== 'https' && !$localDevelopment) || $host === '' || isset($baseParts['user']) || isset($baseParts['pass']) || isset($baseParts['query']) || isset($baseParts['fragment'])) {
         error_log('[application] Invalid Tour Kinet API base URL configuration.');
         return [];
     }
@@ -32,12 +47,11 @@ function api_request(string $method, string $path, array $query = [], ?array $pa
         error_log('[application] Invalid Tour Kinet API key configuration.');
         return [];
     }
-    $port = (int) ($baseParts['port'] ?? 443);
+    $port = (int) ($baseParts['port'] ?? ($localDevelopment ? 80 : 443));
     if ($port < 1 || $port > 65535) {
         error_log('[application] Invalid Tour Kinet API port configuration.');
         return [];
     }
-    $host = strtolower((string) $baseParts['host']);
     $url = rtrim($base, '/') . $path;
     if ($query !== []) {
         $url .= '?' . http_build_query($query);
@@ -52,7 +66,7 @@ function api_request(string $method, string $path, array $query = [], ?array $pa
     if ($key === '') {
         return $method === 'GET' ? (cache_get_stale($cacheKey) ?? []) : [];
     }
-    $resolvedIp = api_public_ip($host);
+    $resolvedIp = $localDevelopment ? '127.0.0.1' : api_public_ip($host);
     if ($resolvedIp === null) {
         error_log('[application] Tour Kinet API host did not resolve to a public address.');
         return $method === 'GET' ? (cache_get_stale($cacheKey) ?? []) : [];
@@ -128,7 +142,7 @@ function getPackage(string $slug): array
 
 function getFeaturedPackages(): array
 {
-    return array_values(array_filter(api_items(getPackages()), static fn($item): bool => is_array($item) && (($item['featured'] ?? false) === true || ($item['is_featured'] ?? false) === true)));
+    return getPackages(['is_featured' => 'true', 'per_page' => 3]);
 }
 
 function getBlogs(array $filters = []): array
@@ -191,6 +205,10 @@ function api_single_item(array $response, string $slug): array
 {
     if (isset($response['data']) && is_array($response['data']) && !array_is_list($response['data'])) {
         $item = $response['data'];
+        if (isset($item['package']) && is_array($item['package'])) {
+            $package = $item['package'];
+            return ($package['slug'] ?? null) === $slug || ($package['package_hash'] ?? null) === $slug ? $item : [];
+        }
         return !isset($item['slug']) || $item['slug'] === $slug ? $item : [];
     }
     foreach (api_items($response) as $item) {

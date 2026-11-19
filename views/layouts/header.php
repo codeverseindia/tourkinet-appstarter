@@ -3,6 +3,10 @@ declare(strict_types=1);
 $company = (string) ($website['company_name'] ?? config('website.company_name'));
 $metaTitle = (string) ($meta_title ?? $title ?? config('website.meta_title'));
 $metaDescription = (string) ($description ?? config('website.meta_description'));
+$metaKeywords = is_array($keywords ?? null)
+    ? implode(', ', array_values(array_filter(array_map(static fn($keyword): string => trim(text_value($keyword)), $keywords), static fn(string $keyword): bool => $keyword !== '')))
+    : '';
+$socialImage = safe_image_url($ogImage ?? null);
 ?>
 <!doctype html>
 <html lang="en">
@@ -11,11 +15,13 @@ $metaDescription = (string) ($description ?? config('website.meta_description'))
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= e(page_title($metaTitle)) ?></title>
   <meta name="description" content="<?= e($metaDescription) ?>">
+  <?php if ($metaKeywords !== ''): ?><meta name="keywords" content="<?= e($metaKeywords) ?>"><?php endif; ?>
   <link rel="canonical" href="<?= e($canonical ?? config('app.url')) ?>">
   <meta property="og:type" content="website">
   <meta property="og:title" content="<?= e(page_title($metaTitle)) ?>">
   <meta property="og:description" content="<?= e($metaDescription) ?>">
   <meta property="og:url" content="<?= e($canonical ?? config('app.url')) ?>">
+  <?php if ($socialImage !== null): ?><meta property="og:image" content="<?= e($socialImage) ?>"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="<?= e($socialImage) ?>"><?php endif; ?>
   <?php
   $siteUrl = rtrim(text_value($website['url'] ?? config('app.url')), '/');
   $logoUrl = text_value($website['logo'] ?? '/assets/images/logo.svg');

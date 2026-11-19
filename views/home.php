@@ -25,8 +25,12 @@ $description = 'Discover thoughtful travel experiences and memorable destination
     <?php else: ?>
       <div class="row g-4">
         <?php foreach (array_slice($items, 0, 3) as $item): ?>
-          <?php if (!is_array($item) || !is_published($item)) continue; $slug = valid_slug(text_value($item['slug'] ?? '')); if ($slug === null) continue; ?>
-          <article class="col-12 col-md-6 col-lg-4"><div class="card h-100"><div class="card-body"><h3 class="h5"><a href="/packages/<?= e(rawurlencode($slug)) ?>"><?= e($item['name'] ?? $item['title'] ?? 'Explore this journey') ?></a></h3><p class="mb-0"><?= e($item['short_description'] ?? $item['description'] ?? '') ?></p></div></div></article>
+          <?php if (!is_array($item)) continue; $slug = valid_slug(text_value($item['slug'] ?? '')); if ($slug === null) continue; ?>
+          <?php $thumbnail = $item['thumbnail']['url'] ?? null; ?>
+          <article class="col-12 col-md-6 col-lg-4"><div class="card h-100">
+            <?php if (($image = safe_image_url($thumbnail)) !== null): ?><img class="card-img-top" src="<?= e($image) ?>" width="640" height="400" loading="lazy" alt="<?= e($item['title'] ?? 'Travel package') ?>"><?php endif; ?>
+            <div class="card-body"><h3 class="h5"><a href="/packages/<?= e(rawurlencode($slug)) ?>"><?= e($item['title'] ?? $item['name'] ?? 'Explore this journey') ?></a></h3><p class="mb-0"><?= e($item['overview'] ?? $item['short_description'] ?? $item['description'] ?? '') ?></p></div>
+          </div></article>
         <?php endforeach; ?>
       </div>
     <?php endif; ?>

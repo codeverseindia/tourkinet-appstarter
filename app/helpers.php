@@ -71,7 +71,43 @@ function safe_image_url(mixed $value): ?string
     if (!is_string($value) || filter_var($value, FILTER_VALIDATE_URL) === false) {
         return null;
     }
-    return strtolower((string) parse_url($value, PHP_URL_SCHEME)) === 'https' ? $value : null;
+    $parts = parse_url($value);
+    if (!is_array($parts) || isset($parts['user']) || isset($parts['pass'])) {
+        return null;
+    }
+    if (strtolower((string) ($parts['scheme'] ?? '')) === 'https') {
+        return $value;
+    }
+    $path = rawurldecode((string) ($parts['path'] ?? ''));
+    return is_local_app_http_url($parts)
+        && preg_match('#^/(?:assets|storage)/#', $path) === 1
+        && !preg_match('#(?:^|/)\.\.(?:/|$)#', $path)
+        ? $value
+        : null;
+}
+
+function safe_canonical_url(mixed $value): ?string
+{
+    if (!is_string($value) || filter_var($value, FILTER_VALIDATE_URL) === false) {
+        return null;
+    }
+    $parts = parse_url($value);
+    if (!is_array($parts) || isset($parts['user']) || isset($parts['pass'])) {
+        return null;
+    }
+    return strtolower((string) ($parts['scheme'] ?? '')) === 'https' || is_local_app_http_url($parts)
+        ? $value
+        : null;
+}
+
+function is_local_app_http_url(array $parts): bool
+{
+    return (string) env('APP_ENV', 'local') === 'local'
+        && strtolower((string) ($parts['scheme'] ?? '')) === 'http'
+        && strtolower((string) ($parts['host'] ?? '')) === 'app.tourkinet.loc'
+        && (!isset($parts['port']) || (int) $parts['port'] === 80)
+        && !isset($parts['user'])
+        && !isset($parts['pass']);
 }
 
 function csp_nonce(): string
