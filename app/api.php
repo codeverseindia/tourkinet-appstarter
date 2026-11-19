@@ -1,12 +1,18 @@
 <?php
 declare(strict_types=1);
 
-function api_request(string $method, string $endpoint, array $query = [], ?array $payload = null, int $ttl = 0, array $pathParams = []): array
+const TOURKINET_ENDPOINTS = [
+    'packages' => '',
+    'package' => '',
+    'blogs' => '',
+    'blog' => '',
+    'inquiry' => '',
+];
+
+function api_request(string $method, string $path, array $query = [], ?array $payload = null, int $ttl = 0, array $pathParams = []): array
 {
     $base = trim((string) env('TOURKINET_API_URL', ''));
-    $key = trim((string) env('TOURKINET_API_KEY', ''));
-    $domain = trim((string) env('TOURKINET_CLIENT_DOMAIN', ''));
-    $path = trim((string) env($endpoint, ''));
+    $key = trim((string) env('TOURKINET_ACCESS_KEY', ''));
     foreach ($pathParams as $name => $value) {
         $path = str_replace('{' . $name . '}', rawurlencode((string) $value), $path);
     }
@@ -20,10 +26,6 @@ function api_request(string $method, string $endpoint, array $query = [], ?array
     }
     if (!preg_match('#^/[A-Za-z0-9._~/-]+$#D', $path) || str_starts_with($path, '//') || str_contains($path, '..')) {
         error_log('[application] Invalid Tour Kinet API endpoint configuration.');
-        return [];
-    }
-    if ($domain !== '' && (!preg_match('/^[A-Za-z0-9.-]+$/D', $domain) || str_contains($domain, '..'))) {
-        error_log('[application] Invalid Tour Kinet client domain configuration.');
         return [];
     }
     if (preg_match('/[\x00-\x20\x7f]/', $key)) {
@@ -40,14 +42,14 @@ function api_request(string $method, string $endpoint, array $query = [], ?array
     if ($query !== []) {
         $url .= '?' . http_build_query($query);
     }
-    $cacheKey = 'tourkinet:' . hash('sha256', $method . ':' . $url . ':' . $domain);
+    $cacheKey = 'tourkinet:' . hash('sha256', $method . ':' . $url);
     if ($method === 'GET' && $ttl > 0) {
         $cached = cache_get($cacheKey);
         if (is_array($cached)) {
             return $cached;
         }
     }
-    if ($key === '' || $domain === '') {
+    if ($key === '') {
         return $method === 'GET' ? (cache_get_stale($cacheKey) ?? []) : [];
     }
     $resolvedIp = api_public_ip($host);
@@ -65,7 +67,6 @@ function api_request(string $method, string $endpoint, array $query = [], ?array
     }
     $headers = [
         'Authorization: Bearer ' . $key,
-        'X-Client-Domain: ' . $domain,
         'Accept: application/json',
     ];
     $options = [
@@ -112,7 +113,7 @@ function api_request(string $method, string $endpoint, array $query = [], ?array
 function getPackages(array $filters = []): array
 {
     $ttl = $filters === [] ? (int) env('CACHE_PACKAGES_TTL', 900) : 0;
-    return api_request('GET', 'TOURKINET_PACKAGES_ENDPOINT', $filters, null, $ttl);
+    return api_request('GET', TOURKINET_ENDPOINTS['packages'], $filters, null, $ttl);
 }
 
 function getPackage(string $slug): array
@@ -121,7 +122,7 @@ function getPackage(string $slug): array
     if ($slug === '') {
         return [];
     }
-    $response = api_request('GET', 'TOURKINET_PACKAGE_ENDPOINT', [], null, (int) env('CACHE_PACKAGES_TTL', 900), ['slug' => $slug]);
+    $response = api_request('GET', TOURKINET_ENDPOINTS['package'], [], null, (int) env('CACHE_PACKAGES_TTL', 900), ['slug' => $slug]);
     return api_single_item($response, $slug);
 }
 
@@ -133,7 +134,7 @@ function getFeaturedPackages(): array
 function getBlogs(array $filters = []): array
 {
     $ttl = $filters === [] ? (int) env('CACHE_BLOGS_TTL', 1800) : 0;
-    return api_request('GET', 'TOURKINET_BLOGS_ENDPOINT', $filters, null, $ttl);
+    return api_request('GET', TOURKINET_ENDPOINTS['blogs'], $filters, null, $ttl);
 }
 
 function getBlog(string $slug): array
@@ -142,7 +143,7 @@ function getBlog(string $slug): array
     if ($slug === '') {
         return [];
     }
-    $response = api_request('GET', 'TOURKINET_BLOG_ENDPOINT', [], null, (int) env('CACHE_BLOGS_TTL', 1800), ['slug' => $slug]);
+    $response = api_request('GET', TOURKINET_ENDPOINTS['blog'], [], null, (int) env('CACHE_BLOGS_TTL', 1800), ['slug' => $slug]);
     return api_single_item($response, $slug);
 }
 
@@ -182,7 +183,7 @@ function submitInquiry(array $data): array
     if (!rate_limit_allow('api-inquiry', (string) ($_SERVER['REMOTE_ADDR'] ?? 'cli'), 5, 600)) {
         return ['success' => false];
     }
-    $response = api_request('POST', 'TOURKINET_INQUIRY_ENDPOINT', [], $data);
+    $response = api_request('POST', TOURKINET_ENDPOINTS['inquiry'], [], $data);
     return ['success' => $response !== [] && ($response['success'] ?? true) !== false, 'data' => $response];
 }
 

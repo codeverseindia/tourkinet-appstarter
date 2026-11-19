@@ -31,23 +31,15 @@ The optional `--host` value must be an IP address; the default bind address is l
 
 `.env` uses a restricted `KEY=value` syntax: uppercase key names, one value per line, optional matching single/double quotes, and full-line `#` comments. Do not put secrets in `public_html/`. `.env` is ignored by Git.
 
-Set `TOURKINET_API_URL`, `TOURKINET_API_KEY`, and `TOURKINET_CLIENT_DOMAIN` to the values issued for your account. The endpoint contract was not available in this starter, so set the endpoint path variables only after confirming them with Tour Kinet:
+Set only `TOURKINET_API_URL` and `TOURKINET_ACCESS_KEY` from your account. Endpoint paths are deliberately blank in `TOURKINET_ENDPOINTS` in `app/api.php` until Tour Kinet's contracts are confirmed, so package, blog, and inquiry requests remain safely disabled in the meantime. Do not add a client-domain header or guess endpoint paths.
 
-```ini
-TOURKINET_PACKAGES_ENDPOINT=/confirmed/path
-TOURKINET_PACKAGE_ENDPOINT=/confirmed/path
-TOURKINET_BLOGS_ENDPOINT=/confirmed/path
-TOURKINET_BLOG_ENDPOINT=/confirmed/path
-TOURKINET_INQUIRY_ENDPOINT=/confirmed/path
-```
-
-All API calls are server-side, require HTTPS and use TLS verification. GET responses are cached under `storage/cache/`; public data may be served stale for `CACHE_MAX_STALE` seconds after an API failure. Missing credentials/endpoints return empty results rather than breaking static pages. Response data should use `data`, `items`, or `results` arrays; detail endpoint paths can include a `{slug}` placeholder and detail responses may return one object or a matching slug in a list. Map confirmed publication and featured fields to `status`/`published` and `featured` in the small adapter as needed.
+After confirming the API contracts, set the package-list, package-detail, blog-list, blog-detail, and inquiry paths in that constant. All API calls are server-side, require HTTPS and use TLS verification. GET responses are cached under `storage/cache/`; public data may be served stale for `CACHE_MAX_STALE` seconds after an API failure. Missing credentials/endpoints return empty results rather than breaking static pages. Response data should use `data`, `items`, or `results` arrays; detail paths can include a `{slug}` placeholder and detail responses may return one object or a matching slug in a list. Map confirmed publication and featured fields to `status`/`published` and `featured` in the small adapter as needed.
 
 Never put an API key in templates, JavaScript or public assets. Inquiry submissions need the confirmed endpoint contract. Optional Turnstile validation is enabled by configuring both site and secret keys.
 
 ## Routes, views and branding
 
-Register routes in `config/routes.php`. Each handler must be explicitly handled by `handle_route()`; URLs never choose a PHP include. Views live in `views/`, use shared layouts, and must escape dynamic HTML with `e()`. Blog content is rendered as escaped plain text, not trusted HTML. Edit branding and contact data in `config/website.php` or its environment overrides; customize static page text in its matching template and design in `public_html/assets/css/style.css`.
+Register routes in `config/route.php` using the lightweight CI4-style route collection, for example `$routes->get('/packages/{slug}', 'package-detail')` or `$routes->post('/contact', 'submit-inquiry')`. Each handler must be explicitly handled by `handle_route()`; URLs never choose a PHP include. Views live in `views/`, use shared layouts, and must escape dynamic HTML with `e()`. Blog content is rendered as escaped plain text, not trusted HTML. Edit branding and contact data in `config/website.php`; `APP_NAME` and `APP_URL` supply the company name and site URL. Customize static page text in its matching template and design in `public_html/assets/css/style.css`.
 
 ## Production deployment
 

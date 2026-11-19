@@ -27,7 +27,9 @@ $assert(csrf_verify(str_repeat('a', 64)), 'CSRF accepts matching token');
 $assert(!csrf_verify(str_repeat('b', 64)), 'CSRF rejects invalid token');
 
 $assert(count(registered_routes()) >= 10, 'Routes loaded from configuration');
-get('/_test/{slug}', 'about');
+$testRoutes = new RouteCollection();
+$testRoutes->get('/_test/{slug}', 'about');
+$GLOBALS['app_routes'] = [...registered_routes(), ...$testRoutes->all()];
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['REQUEST_URI'] = '/_test/trip-1';
 http_response_code(200);

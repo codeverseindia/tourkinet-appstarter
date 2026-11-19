@@ -4,28 +4,46 @@ declare(strict_types=1);
 /** @var list<array{method:string,uri:string,handler:string}> */
 $GLOBALS['app_routes'] = [];
 
-function register_route(string $method, string $uri, string $handler): void
+final class RouteCollection
 {
-    if ($uri !== '/' && !preg_match('#^/(?:[A-Za-z0-9._~-]+|\{[a-z][a-z0-9_]*\})(?:/(?:[A-Za-z0-9._~-]+|\{[a-z][a-z0-9_]*\}))*$#', $uri)) {
-        throw new InvalidArgumentException('Invalid route pattern.');
+    /** @var list<array{method:string,uri:string,handler:string}> */
+    private array $routes = [];
+
+    public function get(string $uri, string $handler): self
+    {
+        return $this->add('GET', $uri, $handler);
     }
-    $GLOBALS['app_routes'][] = ['method' => $method, 'uri' => $uri, 'handler' => $handler];
-}
 
-function get(string $uri, string $handler): void
-{
-    register_route('GET', $uri, $handler);
-}
+    public function post(string $uri, string $handler): self
+    {
+        return $this->add('POST', $uri, $handler);
+    }
 
-function post(string $uri, string $handler): void
-{
-    register_route('POST', $uri, $handler);
+    /** @return list<array{method:string,uri:string,handler:string}> */
+    public function all(): array
+    {
+        return $this->routes;
+    }
+
+    private function add(string $method, string $uri, string $handler): self
+    {
+        if ($uri !== '/' && !preg_match('#^/(?:[A-Za-z0-9._~-]+|\{[a-z][a-z0-9_]*\})(?:/(?:[A-Za-z0-9._~-]+|\{[a-z][a-z0-9_]*\}))*$#', $uri)) {
+            throw new InvalidArgumentException('Invalid route pattern.');
+        }
+        $this->routes[] = ['method' => $method, 'uri' => $uri, 'handler' => $handler];
+        return $this;
+    }
 }
 
 function load_routes(): void
 {
-    $GLOBALS['app_routes'] = [];
-    require ROOT_PATH . '/config/routes.php';
+    $routes = new RouteCollection();
+    $configureRoutes = require ROOT_PATH . '/config/route.php';
+    if (!$configureRoutes instanceof Closure) {
+        throw new RuntimeException('Route configuration must return a closure.');
+    }
+    $configureRoutes($routes);
+    $GLOBALS['app_routes'] = $routes->all();
 }
 
 /** @return list<array{method:string,uri:string,handler:string}> */
