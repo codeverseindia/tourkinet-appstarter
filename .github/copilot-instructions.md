@@ -8,6 +8,6 @@
 - Preserve CSRF, validation, output escaping, security headers and private storage protections.
 - Use server-rendered PHP templates and escape dynamic output.
 - Keep `public_html/` as the only web document root; keep configuration and storage private.
-- Avoid frontend build tools and third-party frontend libraries.
+- Use the Bootstrap 5 CDN for frontend components; do not add frontend build tools or additional libraries.
 - Keep code compact, readable and backward-compatible where practical.
 - Do not guess undocumented Tour Kinet endpoint contracts or expose API credentials.

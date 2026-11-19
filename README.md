@@ -1,6 +1,6 @@
 # Lightweight Native PHP Travel Starter
 
-A small, server-rendered travel website starter for PHP 8.5. It has no database or mandatory Composer packages and keeps application code, configuration and storage outside the public document root.
+A small, server-rendered travel website starter for PHP 8.5. It has no database or mandatory Composer packages and keeps application code, configuration and storage outside the public document root. Bootstrap 5.3.9 CSS and JavaScript are loaded from jsDelivr with Subresource Integrity; a network connection is required for Bootstrap styling and the collapsible mobile navigation.
 
 ## Requirements and local start
 

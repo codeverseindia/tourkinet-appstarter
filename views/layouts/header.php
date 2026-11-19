@@ -31,22 +31,28 @@ $metaDescription = (string) ($description ?? config('website.meta_description'))
   ]);
   ?>
   <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-yEPZ7jP9S0QKiUQ0m3jjsO4ProIW7wvR9gXkI7JOGa2XVsw53Yke2bsdkBbjmmiX" crossorigin="anonymous">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/theme.css">
 </head>
 <body>
 <header class="site-header">
-  <nav class="container nav" aria-label="Main navigation">
-    <a class="brand" href="/" aria-label="<?= e($company) ?> home"><img src="<?= e($website['logo'] ?? '/assets/images/logo.svg') ?>" width="180" height="40" alt="<?= e($company) ?>"></a>
-    <button class="menu-toggle" type="button" data-menu-toggle aria-controls="main-menu" aria-expanded="true">Menu</button>
-    <div class="nav-links" id="main-menu">
-      <a href="/destinations">Destinations</a>
-      <a href="/packages">Packages</a>
-      <a href="/blogs">Travel stories</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
+  <nav class="navbar navbar-expand-lg bg-white" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="/" aria-label="<?= e($company) ?> home"><img src="<?= e($website['logo'] ?? '/assets/images/logo.svg') ?>" width="180" height="40" alt="<?= e($company) ?>"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="main-menu">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/destinations">Destinations</a></li>
+          <li class="nav-item"><a class="nav-link" href="/packages">Packages</a></li>
+          <li class="nav-item"><a class="nav-link" href="/blogs">Travel stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
 </header>
 <main>
-<script src="/assets/js/app.js" defer></script>
