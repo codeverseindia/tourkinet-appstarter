@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use CodeverseIndia\LightPHP\Application;
+use TourKinet\TravelApp\TravelApplication;
 
 $root = dirname(__DIR__);
 $autoload = $root . '/vendor/autoload.php';
@@ -10,7 +11,13 @@ if (!is_file($autoload)) {
 }
 require $autoload;
 
-$application = Application::boot($root, ['app'], $root . '/app/Config', $root . '/app/Views');
+$application = Application::boot(
+    $root,
+    ['app', 'website', 'tourkinet'],
+    $root . '/app/Config',
+    $root . '/app/Views',
+);
+TravelApplication::register($application);
 
 $registerClientRoutes = require $root . '/config/route.php';
 if (!$registerClientRoutes instanceof Closure) {

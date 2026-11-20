@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="80" viewBox="0 0 360 80" role="img" aria-labelledby="title">
+  <title id="title">Travel Website</title>
+  <rect width="80" height="80" rx="18" fill="#0d6efd"/>
+  <path d="M20 48 40 22l20 26-20 12z" fill="#fff"/>
+  <text x="100" y="52" fill="#212529" font-family="Arial, sans-serif" font-size="30" font-weight="700">Travel Website</text>
+</svg>

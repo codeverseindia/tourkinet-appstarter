@@ -4,9 +4,10 @@
   "type": "project",
   "license": "proprietary",
   "require": {
+    "ext-dom": "*",
     "php": "^8.5",
-    "codeverseindia/lightphp-core": "^1.0",
-    "codeverseindia/tourkinet-travel-app": "^1.0"
+    "codeverseindia/lightphp-core": "^1.1",
+    "codeverseindia/tourkinet-travel-app": "^1.1"
   },
   "autoload": {
     "psr-4": {
