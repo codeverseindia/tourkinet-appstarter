@@ -24,7 +24,7 @@ php spark
 php spark serve
 ```
 
-Open the printed local URL, currently `http://localhost:8080`, and set `APP_URL` to that client-site origin. The local API is separate: set `TOURKINET_API_URL=https://api.tourkinet.com/api/v1` only when developing against the local API. The client domain header is derived from `APP_URL` unless explicitly configured.
+Open this workspace at `http://localhost:8080`. `APP_URL` identifies the website, not the API; the localhost value in `.env.example` is only a development default for each developer's own machine. Set it to the relevant client-site origin in another environment. Client developers should use the live Tour Kinet API at `https://api.tourkinet.com/api/v1`, which is the default `TOURKINET_API_URL`. Override it with `http://api.tourkinet.loc/api/v1` only when intentionally testing against a local API. The client domain header is derived from `APP_URL` unless explicitly configured.
 
 Pages render without API credentials. API-backed lists will display an empty state when data is unavailable; they do not invent package availability.
 
