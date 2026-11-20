@@ -31,7 +31,7 @@ final class Console
     private static function help(): int
     {
         echo <<<HELP
-Tour Kinet LightPHP
+LightPHP
 
 Usage: php spark <command> [options]
 
@@ -50,8 +50,8 @@ HELP;
 
     private static function version(Application $application): int
     {
-        echo "Tour Kinet LightPHP\n\n";
-        echo 'Core Version:       ' . self::installedVersion('codeverseindia/tourkinet-lightphp-core') . "\n";
+        echo "LightPHP\n\n";
+        echo 'Core Version:       ' . self::installedVersion('codeverseindia/lightphp-core') . "\n";
         foreach ($application->packageVersions() as $name => $version) {
             printf("%s %s\n", $name . ' Version:', $version);
         }
@@ -92,7 +92,7 @@ HELP;
             'PHP cURL extension' => extension_loaded('curl'),
             'PHP JSON extension' => extension_loaded('json'),
             'Composer autoload' => is_file($root . '/vendor/autoload.php'),
-            'Core package installed' => self::packageInstalled('codeverseindia/tourkinet-lightphp-core'),
+            'Core package installed' => self::packageInstalled('codeverseindia/lightphp-core'),
             'Environment loaded' => $application->config()->get('app.env') !== null,
             'Private storage writable' => is_dir($storage) && is_writable($storage),
             'Routes registered' => $application->router()->all() !== [],

@@ -1,6 +1,6 @@
 {
-    "name": "codeverseindia/tourkinet-lightphp-core",
-    "description": "Tour Kinet LightPHP Core - Lightweight PHP Application Foundation",
+    "name": "codeverseindia/lightphp-core",
+    "description": "LightPHP Core - Lightweight PHP Application Foundation",
     "type": "library",
     "license": "proprietary",
     "require": {

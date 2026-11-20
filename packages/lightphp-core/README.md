@@ -1,4 +1,4 @@
-# Tour Kinet LightPHP Core
+# LightPHP Core
 
 LightPHP Core is the framework-independent PHP 8.5 application foundation used by the website starter and the Tour Kinet Travel App. It provides application bootstrap, request/response handling, explicit routing, template resolution, configuration, file caching, security primitives, HTTP transport, and the Spark CLI.
 
