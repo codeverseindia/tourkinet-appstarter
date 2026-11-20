@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e6c32e452c1c8b4ea0369def597f5bd",
+    "content-hash": "56a5286c4e540a22ff8e7a0fd195551d",
     "packages": [
         {
-            "name": "codeverseindia/tourkinet-lightphp-core",
-            "version": "1.0.0",
+            "name": "codeverseindia/lightphp-core",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeverseindia/lightphp-core.git",
+                "reference": "5bba233d2a3f240b6a812239dd80fe1b7863a549"
+            },
             "dist": {
-                "type": "path",
-                "url": "packages/lightphp-core",
-                "reference": "1228cac3e5c293cf364523779a5915f97e661895"
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeverseindia/lightphp-core/zipball/5bba233d2a3f240b6a812239dd80fe1b7863a549",
+                "reference": "5bba233d2a3f240b6a812239dd80fe1b7863a549",
+                "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
@@ -21,53 +27,63 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "TourKinet\\LightPHP\\": "src/"
-                },
                 "files": [
                     "src/Support/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "CodeverseIndia\\LightPHP\\": "src/"
+                }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "proprietary"
             ],
-            "description": "Tour Kinet LightPHP Core - Lightweight PHP Application Foundation",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "description": "LightPHP Core - Lightweight PHP Application Foundation",
+            "support": {
+                "issues": "https://github.com/codeverseindia/lightphp-core/issues",
+                "source": "https://github.com/codeverseindia/lightphp-core/tree/v1.1.0"
+            },
+            "time": "2026-11-20T09:47:29+00:00"
         },
         {
             "name": "codeverseindia/tourkinet-travel-app",
-            "version": "1.0.0",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeverseindia/tourkinet-travel-app.git",
+                "reference": "681e34ed3f57e9b75ec2a5cc2b7c1093c3f12510"
+            },
             "dist": {
-                "type": "path",
-                "url": "packages/travel-app",
-                "reference": "00bf18004a44262611b576517ba3cb7fb884b632"
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeverseindia/tourkinet-travel-app/zipball/681e34ed3f57e9b75ec2a5cc2b7c1093c3f12510",
+                "reference": "681e34ed3f57e9b75ec2a5cc2b7c1093c3f12510",
+                "shasum": ""
             },
             "require": {
-                "codeverseindia/tourkinet-lightphp-core": "^1.0",
+                "codeverseindia/lightphp-core": "^1.1",
                 "ext-curl": "*",
                 "ext-json": "*",
                 "php": "^8.5"
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "TourKinet\\TravelApp\\": "src/"
-                },
                 "files": [
                     "src/Support/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "TourKinet\\TravelApp\\": "src/"
+                }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "proprietary"
             ],
             "description": "Tour Kinet Travel Application - Packages, Blogs, Destinations and Inquiries",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/codeverseindia/tourkinet-travel-app/issues",
+                "source": "https://github.com/codeverseindia/tourkinet-travel-app/tree/v1.1.0"
+            },
+            "time": "2026-11-20T11:13:19+00:00"
         }
     ],
     "packages-dev": [],

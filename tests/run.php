@@ -5,7 +5,7 @@ $root = dirname(__DIR__);
 require $root . '/vendor/autoload.php';
 $application = require $root . '/bootstrap/app.php';
 
-use TourKinet\LightPHP\Core\Request;
+use CodeverseIndia\LightPHP\Core\Request;
 
 $tests = 0;
 $failures = [];
@@ -16,48 +16,21 @@ $assert = static function (bool $condition, string $name) use (&$tests, &$failur
     }
 };
 
-$about = $application->handle(new Request('GET', '/about'));
-$assert($about->status() === 200 && str_contains($about->body(), 'Travel with more meaning.'), 'Client website serves static about page');
-$assert(str_contains($about->body(), 'Our mission') && str_contains($about->body(), 'How we help'), 'About page includes mission and services');
-$assert(str_contains($about->body(), '<meta name="description"'), 'Page metadata is rendered through the shared layout');
+$home = $application->handle(new Request('GET', '/'));
+$appName = (string) $application->config()->get('app.name', 'LightPHP App Starter');
+$assert($home->status() === 200 && str_contains($home->body(), 'Welcome to ' . e($appName)), 'Welcome page renders the configured application name');
 
-$destinations = $application->handle(new Request('GET', '/destinations'));
-$assert($destinations->status() === 200
-    && str_contains($destinations->body(), 'Himalayan Highlands')
-    && str_contains($destinations->body(), 'highlands.svg'), 'Destinations page renders static configured cards');
+$escaped = $application->view()->render('pages/welcome', ['appName' => '<script>alert(1)</script>']);
+$assert(!str_contains($escaped, '<script>alert(1)</script>')
+    && str_contains($escaped, '&lt;script&gt;alert(1)&lt;/script&gt;'), 'Welcome page escapes dynamic application names');
 
-$missing = $application->handle(new Request('GET', '/missing-page'));
-$assert($missing->status() === 404 && str_contains($missing->body(), 'Page not found'), 'Unknown route uses the 404 template');
-
-$method = $application->handle(new Request('PUT', '/contact'));
-$assert($method->status() === 405, 'Unsupported route method returns 405');
-
-$sessionDirectory = sys_get_temp_dir() . '/lightphp-session-test-' . bin2hex(random_bytes(5));
-mkdir($sessionDirectory, 0700);
-session_save_path($sessionDirectory);
-$sessionId = 'lightphp' . bin2hex(random_bytes(6));
-session_id($sessionId);
-session_start();
-$contact = $application->handle(new Request('GET', '/contact'));
-$assert($contact->status() === 200
-    && preg_match('/name="_csrf" value="[a-f0-9]{64}"/', $contact->body()) === 1
-    && str_contains($contact->body(), 'name="website"'), 'Inquiry form includes CSRF and honeypot protections');
-session_write_close();
-$sessionFile = $sessionDirectory . '/sess_' . $sessionId;
-if (is_file($sessionFile)) {
-    unlink($sessionFile);
-}
-rmdir($sessionDirectory);
-
-$robots = $application->handle(new Request('GET', '/robots.txt'));
-$assert($robots->status() === 200 && str_contains($robots->body(), 'Sitemap:'), 'Robots route is available');
-$theme = $application->handle(new Request('GET', '/theme.css'));
-$assert($theme->status() === 200 && str_contains($theme->body(), '--color-primary'), 'Client theme route is available');
+$missing = $application->handle(new Request('GET', '/packages'));
+$assert($missing->status() === 404, 'Travel App routes are not registered in the Core starter');
 
 $routes = $application->router()->all();
-$assert(count($routes) >= 16, 'Travel and client routes are registered explicitly');
+$assert(count($routes) === 1 && $routes[0]['uri'] === '/', 'Starter registers only the welcome route');
 
-echo "{$tests} website tests, " . count($failures) . " failures\n";
+echo "{$tests} starter tests, " . count($failures) . " failures\n";
 foreach ($failures as $failure) {
     fwrite(STDERR, "FAIL: {$failure}\n");
 }

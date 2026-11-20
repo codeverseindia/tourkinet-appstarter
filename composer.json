@@ -1,24 +1,11 @@
 {
-  "name": "codeverseindia/tourkinet-website-starter",
-  "description": "Lightweight Travel Website powered by Tour Kinet LightPHP",
+  "name": "codeverseindia/lightphp-app-starter",
+  "description": "Minimal PHP application starter powered by LightPHP Core",
   "type": "project",
   "license": "proprietary",
-  "repositories": [
-    {
-      "type": "path",
-      "url": "packages/*",
-      "options": {
-        "symlink": true,
-        "versions": {
-          "codeverseindia/tourkinet-lightphp-core": "1.0.0",
-          "codeverseindia/tourkinet-travel-app": "1.0.0"
-        }
-      }
-    }
-  ],
   "require": {
     "php": "^8.5",
-    "codeverseindia/tourkinet-lightphp-core": "^1.0",
+    "codeverseindia/lightphp-core": "^1.0",
     "codeverseindia/tourkinet-travel-app": "^1.0"
   },
   "autoload": {
@@ -30,13 +17,7 @@
     "serve": "@php spark serve",
     "routes": "@php spark routes",
     "cache-clear": "@php spark cache:clear",
-    "test": [
-      "@php tests/run.php",
-      "@php packages/lightphp-core/tests/run.php",
-      "@php packages/travel-app/tests/run.php"
-    ],
-    "test:core": "@php packages/lightphp-core/tests/run.php",
-    "test:travel": "@php packages/travel-app/tests/run.php"
+    "test": "@php tests/run.php"
   },
   "config": {
     "sort-packages": true,
