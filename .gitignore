@@ -4,3 +4,7 @@
 !/storage/cache/.gitkeep
 /storage/logs/*
 !/storage/logs/.gitkeep
+/writable/cache/*
+!/writable/cache/.gitkeep
+/writable/logs/*
+!/writable/logs/.gitkeep

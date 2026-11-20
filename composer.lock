@@ -1,0 +1,84 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "1e6c32e452c1c8b4ea0369def597f5bd",
+    "packages": [
+        {
+            "name": "codeverseindia/tourkinet-lightphp-core",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/lightphp-core",
+                "reference": "1228cac3e5c293cf364523779a5915f97e661895"
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TourKinet\\LightPHP\\": "src/"
+                },
+                "files": [
+                    "src/Support/functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Tour Kinet LightPHP Core - Lightweight PHP Application Foundation",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "codeverseindia/tourkinet-travel-app",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/travel-app",
+                "reference": "00bf18004a44262611b576517ba3cb7fb884b632"
+            },
+            "require": {
+                "codeverseindia/tourkinet-lightphp-core": "^1.0",
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TourKinet\\TravelApp\\": "src/"
+                },
+                "files": [
+                    "src/Support/functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Tour Kinet Travel Application - Packages, Blogs, Destinations and Inquiries",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "^8.5"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
+}

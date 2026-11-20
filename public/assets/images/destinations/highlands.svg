@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title">
+  <title id="title">Illustrated Himalayan mountain landscape</title>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#b9dbe8"/><stop offset="1" stop-color="#f5e7c5"/></linearGradient>
+    <linearGradient id="hill" x2="0" y2="1"><stop stop-color="#6f9c82"/><stop offset="1" stop-color="#355f55"/></linearGradient>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1200v750H0z"/>
+  <circle cx="930" cy="170" r="72" fill="#f3bf68"/>
+  <path fill="#f4f2e7" d="m25 525 250-340 135 183 130-250 278 407H25z"/>
+  <path fill="#8bb4ac" d="m360 520 230-318 276 318H360z"/>
+  <path fill="#557d6c" d="m0 560 262-168 152 142 246-199 258 214 135-128 147 115v214H0z"/>
+  <path fill="url(#hill)" d="m0 625 210-104 173 73 202-127 198 139 190-78 227 91v131H0z"/>
+</svg>
