@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56a5286c4e540a22ff8e7a0fd195551d",
+    "content-hash": "ad2087a3a1ed9104f9e796d8c1e1ef05",
     "packages": [
         {
             "name": "codeverseindia/lightphp-core",
@@ -93,6 +93,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
+        "ext-dom": "*",
         "php": "^8.5"
     },
     "platform-dev": {},

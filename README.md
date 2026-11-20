@@ -24,7 +24,7 @@ The app uses the live Tour Kinet API by default. Configure `TOURKINET_API_KEY` i
 This repository is the starter source. After it is published on Packagist, create a new project with:
 
 ```sh
-composer create-project codeverseindia/lightphp-app-starter my-app
+composer create-project codeverseindia/tourkinet-appstarter my-app
 ```
 
 ## Commands
